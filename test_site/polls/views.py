@@ -1,7 +1,7 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.http import HttpRequest, Http404
+from django.shortcuts import render, get_object_or_404
 
-from .models import Question, Choice
+from .models import Question
 
 
 def index(request: HttpRequest):
@@ -13,18 +13,18 @@ def index(request: HttpRequest):
 
 
 def detail(request: HttpRequest, question_id):
-    question = Question.objects.filter(id=question_id)[0]
+    question = get_object_or_404(Question, pk=question_id)
     context ={"question": question}
-    return HttpResponse(render(request, "polls/detail.html", context))
+    return render(request, "polls/detail.html", context)
 
 
 def results(request: HttpRequest, question_id):
-    question = Question.objects.filter(id=question_id)[0]
+    question = Question.objects.get(id=question_id)
     context = {"question": question}
-    return HttpResponse(render(request, "polls/results.html", context))
+    return render(request, "polls/results.html", context)
 
 
 def vote(request: HttpRequest, question_id):
-    question = Question.objects.filter(id=question_id)[0]
+    question = Question.objects.get(id=question_id)
     context = {"question": question}
-    return HttpResponse(render(request, "polls/vote.html", context))
+    return render(request, "polls/vote.html", context)
