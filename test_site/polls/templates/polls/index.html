@@ -8,7 +8,7 @@
     {% if nearest_questions %}
         <ul>
             {% for q in nearest_questions %}
-                <li><a href="/polls/{{ q.id }}/">{{ q.question_text }}</a></li>
+                <li><a href="{% url 'polls:detail' q.id %}">{{ q.question_text }}</a></li>
             {% endfor %}
         </ul>
     {% else %}
