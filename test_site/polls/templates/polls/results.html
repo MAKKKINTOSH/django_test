@@ -5,6 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-  There are reults of next question: {{ question.question_text }}
+    <h1>{{ question.question_text }}</h1>
+
+    <ul>
+    {% for c in question.choice_set.all %}
+        <li>{{ c.choice_text }} -- {{ c.votes }} vote {{ choice.votes|pluralize }}</li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
 </body>
 </html>
