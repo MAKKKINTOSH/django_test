@@ -1,28 +1,27 @@
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, HttpRequest
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views import generic
 
-from .models import Question, Choice
-
-
-def index(request: HttpRequest):
-    nearest_questions = Question.objects.order_by("-date_of_publication")[:5]
-    context = {
-        "nearest_questions": nearest_questions,
-    }
-    return render(request, "polls/index.html", context)
+from .models import Choice, Question
 
 
-def detail(request: HttpRequest, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    context ={"question": question}
-    return render(request, "polls/detail.html", context)
+class IndexView(generic.ListView):
+    template_name = "polls/index.html"
+    context_object_name = "nearest_questions"
+
+    def get_queryset(self):
+        return Question.objects.order_by("-date_of_publication")[:5]
 
 
-def results(request: HttpRequest, question_id):
-    question = Question.objects.get(pk=question_id)
-    context = {"question": question}
-    return render(request, "polls/results.html", context)
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = "polls/detail.html"
+
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = "polls/results.html"
 
 
 def vote(request: HttpRequest, question_id):
@@ -34,7 +33,7 @@ def vote(request: HttpRequest, question_id):
     }
 
     try:
-        print(request.POST, request.GET, request.META, sep="\n")
+        #print(request.POST, request.GET, request.META, sep="\n")
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except(KeyError, Choice.DoesNotExist):
         return render(
