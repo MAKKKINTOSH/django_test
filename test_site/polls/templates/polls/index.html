@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -8,7 +10,7 @@
     {% if nearest_questions %}
         <ul>
             {% for q in nearest_questions %}
-                <li><a href="{% url 'polls:detail' q.id %}">{{ q.question_text }}</a></li>
+                <li><a href="{% url 'polls:detail' q.id %}" >{{ q.question_text }}</a></li>
             {% endfor %}
         </ul>
     {% else %}
