@@ -22,4 +22,5 @@ from polls.OLDviews import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('polls/', include("polls.urls")),
+    path("debug/", include("debug_toolbar.urls"))
 ]
